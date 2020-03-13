@@ -1,0 +1,29 @@
+{% extends 'stocks/base.html' %}
+{% block title %}webStock - Home{% endblock title %}
+
+{% block content %}
+
+{% if ticker %}
+    {{ ticker }}
+{% endif %}
+
+{% if api %}
+    {% if api == "Error" %}
+        There was a problem with your ticker symbol, please try again...
+    {% else %}
+
+        <h1>{{ api.companyName }}</h1>
+        Price: ${{ api.latestPrice }}<br>
+        Previous Close: ${{ api.previousClose }}<br>
+        Current Value: ${{ api.latestPrice }}<br>
+        Market Cap: ${{ api.marketCap }}<br>
+        YTD Change: {{ api.ytdChange }}<br>
+        52-week High: ${{ api.week52High }}<br>
+        52-week Low: ${{ api.week52Low }}<br>
+
+    {% endif %}
+{% else %}
+
+{% endif %}
+
+{% endblock content %}
