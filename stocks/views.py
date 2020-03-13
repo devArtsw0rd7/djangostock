@@ -1,4 +1,4 @@
-Copyright (c) Andrew Straight 2020
+# Copyright (c) Andrew Straight 2020
 
 from django.shortcuts import render, redirect
 from .models import Stock
