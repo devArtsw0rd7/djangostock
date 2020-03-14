@@ -1,0 +1,15 @@
+{% extends 'stocks/base.html' %}
+{% block title %}webStock - Register{% endblock title %}
+
+{% block content %}
+    <h1>Register</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+    <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Register</button>
+    </form>
+    <br>
+    If you already have an account, <a href="/login"><strong>login</strong></a> instead.
+
+{% endblock content %}

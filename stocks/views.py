@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from .models import Stock
 from django.contrib import messages
 from .forms import StockForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
 
 
 def index(request):
@@ -82,3 +84,47 @@ def remove_stock(request):
     ticker = Stock.objects.all()
     context = {'ticker': ticker}
     return render(request, 'remove_stock.html', context)
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f"New account created: {username}")
+            login(request, user)
+            messages.info(request, f"You are now logged in as {username}")
+            return redirect('stocks:index')
+        else:
+            for message in form.error_messages:
+                messages.error(request, f"{message}:{form.error_messages[message]}")
+    form = UserCreationForm
+    context = {'form': form}
+    return render(request, 'register.html', context)
+
+
+def login_request(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}")
+                return redirect('stocks:add_stock')
+            else:
+                return messages.error(request, 'Invalid username or password')
+        else:
+            return messages.error(request, 'Invalid username or password')
+    form = AuthenticationForm()
+    context = {'form': form}
+    return render(request, 'login.html', context)
+
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "Logged out successfully!")
+    return redirect('stocks:index')

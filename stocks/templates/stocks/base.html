@@ -26,8 +26,19 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'stocks:index' %}">Home <span class="sr-only">(current)</span></a>
             </li>
+            <!--
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'stocks:about' %}">About</a>
+            </li>
+            -->
+            {% if user.is_authenticated %}
+            <!--
+            <li class="nav-item">
+                <a class="nav-link" href=""></a>
+            </li>
+            -->
+             <li class="nav-item">
+                <a class="nav-link" href="{% url 'stocks:logout' %}">Logout</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'stocks:add_stock' %}">Add Stock</a>
@@ -35,12 +46,34 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'stocks:remove_stock' %}">Remove Stock</a>
             </li>
-        </ul>
+            {% else %}
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'stocks:register' %}">Register</a>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link" href="{% url 'stocks:login' %}">Login</a>
+            </li>
+            {% endif %}
 
+        </ul>
+        <!-- Toast script handling for site-wide messaging -->
+        {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <script>M.toast({html: "{{message}}", classes: 'green rounded', displayLength:2000});</script>
+            {% elif message.tags == 'info'%}
+                <script>M.toast({html: "{{message}}", classes: 'blue rounded', displayLength:2000});</script>
+            {% elif message.tags == 'warning'%}
+                <script>M.toast({html: "{{message}}", classes: 'orange rounded', displayLength:10000});</script>
+            {% elif message.tags == 'error'%}
+                <script>M.toast({html: "{{message}}", classes: 'red rounded', displayLength:10000});</script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
         <!--Get Stock Quote Search Form-->
         <form action="{% url 'stocks:index' %}" class="form-inline my-2 my-lg-0" method="POST">
             {% csrf_token %}
-            <input class="form-control mr-sm-2" type="search" placeholder="Enter Stock Ticker Symbol"
+            <input class="form-control mr-sm-2" type="search" placeholder="Enter Ticker Symbol"
                    aria-label="Search" name="ticker">
             <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Stock Quote</button>
         </form>
