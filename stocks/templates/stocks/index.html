@@ -1,12 +1,15 @@
 {% extends 'stocks/base.html' %}
+<!-- Template tab title to provide contextual title tag for each page that is generated -->
 {% block title %}webStock - Home{% endblock title %}
 
 {% block content %}
 
+<!-- Error handling to check if data exists-->
 {% if ticker %}
     {{ ticker }}
 {% endif %}
 
+<!-- Error handling to check if stock ticker symbol exists. If so, print out stock data to page.-->
 {% if api %}
     {% if api == "Error" %}
         There was a problem with your ticker symbol, please try again...

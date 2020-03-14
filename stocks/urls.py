@@ -3,8 +3,10 @@
 from django.urls import path
 from . import views
 
+# App namespace
 app_name = 'stocks'
 
+# Url paths for each page
 urlpatterns = [
     path('', views.index, name='index'),
     path('about/', views.about, name='about'),

@@ -13,6 +13,7 @@
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
+<!-- NAVIGATION BAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">webStock Portfolio</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -26,50 +27,58 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'stocks:index' %}">Home <span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="https://github.com/devArtsw0rd7/djangostock" target="_blank">See Code<span
+                        class="sr-only">(current)</span></a>
+            </li>
             <!--
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'stocks:about' %}">About</a>
             </li>
             -->
+            <!-- Check if user is authenticated. If so, present links to Logout, Add Stock, Remove Stock.
+            If not authenticated, present links to Register or Login -->
             {% if user.is_authenticated %}
-            <!--
-            <li class="nav-item">
-                <a class="nav-link" href=""></a>
-            </li>
-            -->
-             <li class="nav-item">
-                <a class="nav-link" href="{% url 'stocks:logout' %}">Logout</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'stocks:add_stock' %}">Add Stock</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'stocks:remove_stock' %}">Remove Stock</a>
-            </li>
+                <!--
+                <li class="nav-item">
+                    <a class="nav-link" href=""></a>
+                </li>
+                -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stocks:logout' %}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stocks:add_stock' %}">Add Stock</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stocks:remove_stock' %}">Remove Stock</a>
+                </li>
             {% else %}
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'stocks:register' %}">Register</a>
-            </li>
-             <li class="nav-item">
-                <a class="nav-link" href="{% url 'stocks:login' %}">Login</a>
-            </li>
+                    <a class="nav-link" href="{% url 'stocks:register' %}">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stocks:login' %}">Login</a>
+                </li>
             {% endif %}
 
         </ul>
+
         <!-- Toast script handling for site-wide messaging -->
         {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'success'%}
-                <script>M.toast({html: "{{message}}", classes: 'green rounded', displayLength:2000});</script>
-            {% elif message.tags == 'info'%}
-                <script>M.toast({html: "{{message}}", classes: 'blue rounded', displayLength:2000});</script>
-            {% elif message.tags == 'warning'%}
-                <script>M.toast({html: "{{message}}", classes: 'orange rounded', displayLength:10000});</script>
-            {% elif message.tags == 'error'%}
-                <script>M.toast({html: "{{message}}", classes: 'red rounded', displayLength:10000});</script>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <script>M.toast({html: "{{message}}", classes: 'green rounded', displayLength: 2000});</script>
+                {% elif message.tags == 'info' %}
+                    <script>M.toast({html: "{{message}}", classes: 'blue rounded', displayLength: 2000});</script>
+                {% elif message.tags == 'warning' %}
+                    <script>M.toast({html: "{{message}}", classes: 'orange rounded', displayLength: 10000});</script>
+                {% elif message.tags == 'error' %}
+                    <script>M.toast({html: "{{message}}", classes: 'red rounded', displayLength: 10000});</script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
         <!--Get Stock Quote Search Form-->
         <form action="{% url 'stocks:index' %}" class="form-inline my-2 my-lg-0" method="POST">
             {% csrf_token %}
@@ -81,6 +90,7 @@
 </nav>
 <div class="container">
     <br>
+    <!-- Message alert button -->
     {% for message in messages %}
         <div class="alert alert-info alert-dismissable" role="alert">
             <button class="close" data-dismiss="alert">

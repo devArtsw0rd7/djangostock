@@ -1,9 +1,11 @@
 {% extends 'stocks/base.html' %}
+
+<!-- Template tab title to provide contextual title tag for each page that is generated -->
 {% block title %}webStock - Login{% endblock title %}
 
 {% block content %}
     <h1>Login</h1>
-
+<!-- Login Form -->
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}

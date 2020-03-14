@@ -1,4 +1,5 @@
 {% extends 'stocks/base.html' %}
+<!-- Template tab title to provide contextual title tag for each page that is generated -->
 {% block title %}webStock - Add Stock  {% endblock title %}
 
 {% block content %}
@@ -21,9 +22,10 @@
     {% else %}
         <br>
         <!-- Stock Portfolio Database Table -->
-        <h2>Your current Portfolio:</h2>
+        <h2>Stock ownership for {{ user.username }}</h2>
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-dark">
+
             <!--Table Column Headers-->
             <tr>
 
@@ -39,6 +41,7 @@
             </thead>
 
             <tbody>
+            <!-- Fill table with API data for added stock-->
             {% if ticker %}
                 {% for list_item in output %}
                     <tr>

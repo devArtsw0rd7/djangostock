@@ -9,15 +9,16 @@ from django.contrib.auth import login, logout, authenticate
 
 
 def index(request):
+    """Home page view that connects to the iexcloud API to get stock data."""
     import requests
     import json
 
     if request.method == 'POST':
         ticker = request.POST['ticker']
-
+        # Get request to the API
         api_request = requests.get(
             "https://cloud.iexapis.com/stable/stock/" + ticker + "/quote?token=pk_32f0aadb11194f4dace709097a061e99")
-
+        # Load JSON data
         try:
             api = json.loads(api_request.content)
         except Exception as e:
@@ -33,47 +34,54 @@ def index(request):
 
 
 def about(request):
+    """An about page. Not fully implemented."""
     context = {}
     return render(request, 'about.html', context)
 
 
 def add_stock(request):
+    """Allow user to add a stock to their portfolio. Gets current stock data via ticker symbol and
+    call to the iexcloud API."""
     import requests
     import json
 
     # Add Stock to Database
     if request.method == "POST":
         form = StockForm(request.POST or None)
-
+        # Form validation. If form data is valid, the data is saved and the user is informed that their stock
+        # was added to the database.
         if form.is_valid():
             form.save()
             messages.success(request, "Stock has been added")
             return redirect('/add_stock')
 
     else:
+        # Get all stock data from the database
         ticker = Stock.objects.all()
         # List to hold json data for each ticker_item
         output = []
         for ticker_item in ticker:
-
+            # Get request to API
             api_request = requests.get(
                 "https://cloud.iexapis.com/stable/stock/" + str(ticker_item) + "/quote?token=pk_32f0aadb11194f4dace709097a061e99")
-
+            # Load JSON data and append to the list for each ticker item
             try:
                 api = json.loads(api_request.content)
                 output.append(api)
             except Exception as e:
                 api = "Error"
-
+        # Handler- if the user has stock data, their portfolio is output and rendered to the add_stock page.
         if ticker.exists():
             context = {'ticker': ticker, 'output': output}
             return render(request, 'add_stock.html', context)
+        # Otherwise, they are informed that they have not added any stocks.
         else:
             context = {'nodata': 'You have not added any stocks to your portfolio.'}
             return render(request, 'add_stock.html', context)
 
 
 def delete(request, stock_id):
+    """Delete a stock from the database."""
     item = Stock.objects.get(pk=stock_id)
     item.delete()
     messages.success(request, "Stock has been deleted!")
@@ -81,14 +89,17 @@ def delete(request, stock_id):
 
 
 def remove_stock(request):
+    """Remove stock view."""
     ticker = Stock.objects.all()
     context = {'ticker': ticker}
     return render(request, 'remove_stock.html', context)
 
 
 def register(request):
+    """User registration function."""
     if request.method == "POST":
         form = UserCreationForm(request.POST)
+        # Form validation
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
@@ -105,8 +116,10 @@ def register(request):
 
 
 def login_request(request):
+    """User login function."""
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
+        # Form validation
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
@@ -125,6 +138,7 @@ def login_request(request):
 
 
 def logout_request(request):
+    """User logout function."""
     logout(request)
     messages.info(request, "Logged out successfully!")
     return redirect('stocks:index')
