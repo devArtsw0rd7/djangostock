@@ -1,9 +1,9 @@
 # Copyright (c) Andrew Straight 2020
 
 from django.shortcuts import render, redirect
-from .models import Stock
+from .StraightAndrewAssignment10models import Stock
 from django.contrib import messages
-from .forms import StockForm
+from .StraightAndrewAssignment10forms import StockForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 
@@ -24,13 +24,13 @@ def index(request):
         except Exception as e:
             api = "Error"
         context = {'api': api}
-        return render(request, 'stocks/index.html', context)
+        return render(request, 'stocks/Straight.Andrew.Assignment-10-index.html', context)
     else:
         context = {'ticker': 'Enter a ticker symbol above...'}
-        return render(request, 'index.html', context)
+        return render(request, 'stocks/Straight.Andrew.Assignment-10-index.html', context)
 
     context = {'api': api}
-    return render(request, 'index.html', context)
+    return render(request, 'Straight.Andrew.Assignment-10-index.html', context)
 
 
 def about(request):
@@ -73,11 +73,11 @@ def add_stock(request):
         # Handler- if the user has stock data, their portfolio is output and rendered to the add_stock page.
         if ticker.exists():
             context = {'ticker': ticker, 'output': output}
-            return render(request, 'add_stock.html', context)
+            return render(request, 'Straight.Andrew.Assignment-10-add_stock.html', context)
         # Otherwise, they are informed that they have not added any stocks.
         else:
             context = {'nodata': 'You have not added any stocks to your portfolio.'}
-            return render(request, 'add_stock.html', context)
+            return render(request, 'Straight.Andrew.Assignment-10-add_stock.html', context)
 
 
 def delete(request, stock_id):
@@ -92,7 +92,7 @@ def remove_stock(request):
     """Remove stock view."""
     ticker = Stock.objects.all()
     context = {'ticker': ticker}
-    return render(request, 'remove_stock.html', context)
+    return render(request, 'stocks/Straight.Andrew.Assignment-10-remove_stock.html', context)
 
 
 def register(request):
@@ -112,7 +112,7 @@ def register(request):
                 messages.error(request, f"{message}:{form.error_messages[message]}")
     form = UserCreationForm
     context = {'form': form}
-    return render(request, 'register.html', context)
+    return render(request, 'Straight.Andrew.Assignment-10-register.html', context)
 
 
 def login_request(request):
@@ -134,7 +134,7 @@ def login_request(request):
             return messages.error(request, 'Invalid username or password')
     form = AuthenticationForm()
     context = {'form': form}
-    return render(request, 'login.html', context)
+    return render(request, 'Straight.Andrew.Assignment-10-login.html', context)
 
 
 def logout_request(request):

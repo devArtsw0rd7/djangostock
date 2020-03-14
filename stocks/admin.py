@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Stock
+from .StraightAndrewAssignment10models import Stock
 
 admin.site.register(Stock)
 

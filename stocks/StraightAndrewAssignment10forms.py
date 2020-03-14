@@ -1,5 +1,5 @@
 from django import forms
-from .models import Stock
+from .StraightAndrewAssignment10models import Stock
 
 
 class StockForm(forms.ModelForm):
